@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from prism import wrap_openai, wrap_anthropic
-
+from prism import wrap_anthropic, wrap_openai
 
 # ─── Mock SDKs ────────────────────────────────────────────────────────────────
+
 
 class _MockCompletions:
     def __init__(self) -> None:
@@ -46,6 +46,7 @@ class _MockAnthropic:
 
 # ─── OpenAI wrapper ──────────────────────────────────────────────────────────
 
+
 def test_openai_passthrough_for_short_messages():
     client = _MockOpenAI()
     wrapped = wrap_openai(client)
@@ -75,6 +76,7 @@ def test_openai_exposes_unwrapped_attrs():
 
 
 # ─── Anthropic wrapper ───────────────────────────────────────────────────────
+
 
 def test_anthropic_passthrough_short():
     client = _MockAnthropic()

@@ -8,13 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-07-08
 
 ### Added
-- Initial release of prism-llm
-- Reversible semantic context compression for LLM agents
-- `ContextCompressor` — lossless compression with anchor preservation
-- Up to 80% token reduction while preserving critical information
-- Anchor-based decompression for lossless reconstruction
-- Span detection and classification (anchor, detail, filler)
-- `prism compress` CLI command
-- tiktoken integration for accurate token counting
-- Comprehensive test suite
+- `compress` / `expand` with three levels (safe, balanced, aggressive)
+- Anchor preservation (URLs, emails, code, numbers, IPs, paths), reference-graph substitution,
+  consecutive-duplicate-line removal, salience filter (aggressive only)
+- `prism compress|expand|stats|bench|install` CLI
+- `wrap_openai` / `wrap_anthropic` client wrappers, Claude Code `UserPromptSubmit` hook
+- Optional tiktoken token counting (falls back to a chars/4 estimate)
 - `py.typed` marker for PEP 561
+
+### Fixed (pre-release cleanup)
+- `CompressedContext.to_prompt()` now writes anchors back verbatim. Previously it emitted
+  placeholders (`◎N◎`) with no definitions, so a model never saw URLs/code blocks and the reported
+  savings were overstated.
+- `expand()` now restores nested anchors (e.g. a URL inside a code block).
+- `prism bench` no longer crashes on Windows consoles with a legacy code page.
+
+### Notes
+- Earlier drafts claimed "up to 80%" and 56-60% reduction and "lossless" compression. These are not
+  supported by measurement; see README "Measured results" and "Status & limitations".

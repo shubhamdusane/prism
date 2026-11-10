@@ -78,7 +78,7 @@ def estimate_savings(
     from .compressor import Level
 
     cc: CompressedContext = compress(text, level=cast(Level, level))
-    compressed_rendered = cc.to_prompt() if include_legend else cc.text
+    compressed_rendered = cc.to_prompt(include_legend=include_legend)
 
     orig_t = token_count(text)
     comp_t = token_count(compressed_rendered)

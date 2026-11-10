@@ -1,7 +1,7 @@
 [project]
 name = "prism-llm"
 version = "0.1.0"
-description = "Reversible semantic context compression for LLM agents. Up to 80% token reduction, lossless anchor preservation."
+description = "Experimental context compression for LLM prompts: anchors kept verbatim, repeated phrases replaced by a legend. Early, pre-1.0."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
@@ -10,7 +10,7 @@ authors = [
 ]
 keywords = ["llm", "tokens", "compression", "context", "agents", "claude", "openai"]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
@@ -24,7 +24,7 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-cov", "ruff", "mypy"]
+dev = ["pytest>=7.0", "ruff"]
 tokenizers = ["tiktoken>=0.5"]
 claude = ["anthropic>=0.30"]
 

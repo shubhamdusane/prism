@@ -4,12 +4,11 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 0.1.x (latest) | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability within **Prism**, please send an email to sdusane4@gmail.com. All reports will be promptly addressed.
+If you discover a security vulnerability within **Prism**, please send an email to sdusane4@gmail.com. Reports are handled on a best-effort basis.
 
 **Please include the following in your report:**
 
@@ -21,9 +20,7 @@ If you discover a security vulnerability within **Prism**, please send an email 
 
 ## Response Timeline
 
-- **Acknowledgment:** Within 48 hours of report submission
-- **Initial Assessment:** Within 72 hours
-- **Fix Deployment:** Within 7 days for confirmed vulnerabilities
+This is a single-maintainer, pre-1.0 project. Reports are handled on a best-effort basis; there is no guaranteed response or fix time.
 
 ## Security Update Process
 

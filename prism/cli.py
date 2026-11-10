@@ -15,7 +15,7 @@ import json
 import sys
 from pathlib import Path
 
-from .compressor import compress, expand, CompressedContext
+from .compressor import CompressedContext, compress, expand
 from .stats import estimate_savings
 
 
@@ -90,7 +90,7 @@ prism — one-line permanent install for Claude Code
 ===================================================
 
 Option 1 — Python SDK user:
-    pip install prism-llm
+    pip install git+https://github.com/shubhamdusane/prism.git
     # Then in your code:
     from openai import OpenAI
     from prism import wrap_openai
@@ -155,6 +155,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Windows consoles default to a legacy codec that cannot print the arrows/section
+    # signs used in output; force UTF-8 so the CLI does not crash there.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
     parser = build_parser()
     args = parser.parse_args(argv)
     return args.func(args)  # type: ignore[no-any-return]

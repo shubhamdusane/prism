@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from prism.stats import token_count, estimate_savings, MODEL_PRICING
+from prism.stats import MODEL_PRICING, estimate_savings, token_count
 
 
 def test_token_count_nonempty():

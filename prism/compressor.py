@@ -1,20 +1,22 @@
 """Core compression algorithm.
 
 Strategy (4 passes):
-  1. Anchor extraction — URLs, emails, code fences, numbers, proper nouns.
-     These are LOSSLESS — preserved verbatim.
+  1. Anchor extraction — URLs, emails, code fences, inline code, numbers, IPs, paths.
+     Held aside so later passes cannot touch them; restored verbatim.
   2. Reference-graph substitution — repeated phrases/n-grams replaced with
      short ID tokens (§1, §2, ...). Reversible via the embedded dictionary.
-  3. Dedup of consecutive near-identical lines (Levenshtein-like fingerprint).
+  3. Dedup of consecutive duplicate lines (hash of the stripped, lower-cased line).
   4. Salience filter — drop sentences below entropy threshold at aggressive
      levels. Marked with ⟦…drop…⟧ placeholders so expand() can reconstruct
      approximately if caller chooses.
 
-Levels:
-  "safe"       — anchors + dedup only. ~20-30% savings, 100% lossless.
-  "balanced"   — adds reference graph. ~40-60% savings, 100% lossless.
-  "aggressive" — adds salience drop. ~60-80% savings, anchors lossless,
-                 prose approximately recoverable via metadata.
+Levels (savings depend entirely on the input; see README "Measured results"):
+  "safe"       - anchors + consecutive-duplicate-line removal.
+  "balanced"   - adds reference graph (repeated phrases -> §N tokens).
+  "aggressive" - adds salience drop (lossy: dropped sentences are not recoverable).
+
+Reversibility: anchors and reference phrases are restored exactly by expand().
+Consecutive duplicate lines (dedup pass) and "aggressive" drops are NOT restored.
 """
 
 from __future__ import annotations
@@ -40,14 +42,61 @@ ANCHOR_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
 
 # ─── Filler words dropped at aggressive level ────────────────────────────────
 
-LOW_SALIENCE = frozenset({
-    "the", "a", "an", "that", "this", "is", "are", "was", "were", "be", "been",
-    "being", "have", "has", "had", "do", "does", "did", "just", "really",
-    "basically", "actually", "simply", "very", "quite", "rather", "somewhat",
-    "of", "in", "on", "at", "to", "for", "with", "by", "from", "as",
-    "and", "or", "but", "so", "if", "then", "than",
-    "i", "you", "we", "they", "he", "she", "it",
-})
+LOW_SALIENCE = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "that",
+        "this",
+        "is",
+        "are",
+        "was",
+        "were",
+        "be",
+        "been",
+        "being",
+        "have",
+        "has",
+        "had",
+        "do",
+        "does",
+        "did",
+        "just",
+        "really",
+        "basically",
+        "actually",
+        "simply",
+        "very",
+        "quite",
+        "rather",
+        "somewhat",
+        "of",
+        "in",
+        "on",
+        "at",
+        "to",
+        "for",
+        "with",
+        "by",
+        "from",
+        "as",
+        "and",
+        "or",
+        "but",
+        "so",
+        "if",
+        "then",
+        "than",
+        "i",
+        "you",
+        "we",
+        "they",
+        "he",
+        "she",
+        "it",
+    }
+)
 
 
 @dataclass
@@ -85,18 +134,25 @@ class CompressedContext:
         """Percent saved (100% = perfect)."""
         return (1.0 - self.ratio) * 100.0
 
-    def to_prompt(self) -> str:
+    def to_prompt(self, include_legend: bool = True) -> str:
         """Render compressed form suitable for sending to an LLM.
 
-        Includes inline legend for §N tokens so any model can reconstruct.
+        Anchors (URLs, emails, code, numbers, paths) are written back verbatim, so the
+        model sees them exactly as in the original; only reference-graph phrases are
+        replaced by short ``§N`` tokens, which are defined in an inline legend.
         """
-        if not self.refs:
-            return self.text
+        out = self.text
+        # Reverse order: later anchors can contain earlier placeholders (nesting).
+        for placeholder, original in reversed(self.anchors):
+            out = out.replace(placeholder, original)
+        if not self.refs or not include_legend:
+            return out
         legend = "\n".join(f"  {k} = {v}" for k, v in self.refs.items())
-        return f"{self.text}\n\n[prism-legend]\n{legend}\n[/prism-legend]"
+        return f"{out}\n\n[prism-legend]\n{legend}\n[/prism-legend]"
 
 
 # ─── Compression pipeline ────────────────────────────────────────────────────
+
 
 def _extract_anchors(text: str) -> tuple[str, list[tuple[str, str]]]:
     """Replace anchors with ◎N◎ placeholders. Return (new_text, anchors)."""
@@ -176,7 +232,9 @@ def _salience_filter(text: str) -> tuple[str, list[tuple[int, str, int]]]:
         if not tokens:
             out.append(sent)
             continue
-        content_ratio = sum(1 for t in tokens if t.strip(".,!?;:") not in LOW_SALIENCE) / len(tokens)
+        content_ratio = sum(1 for t in tokens if t.strip(".,!?;:") not in LOW_SALIENCE) / len(
+            tokens
+        )
         if content_ratio < 0.35 and len(sent) > 20:
             h = hashlib.md5(sent.encode()).hexdigest()[:8]
             dropped.append((pos, h, len(sent)))
@@ -188,6 +246,7 @@ def _salience_filter(text: str) -> tuple[str, list[tuple[int, str, int]]]:
 
 
 # ─── Public API ──────────────────────────────────────────────────────────────
+
 
 def compress(text: str, level: Level = "balanced") -> CompressedContext:
     """Compress `text` into a reversible CompressedContext.
@@ -247,7 +306,7 @@ def expand(cc: CompressedContext) -> str:
         out = out.replace(token, cc.refs[token])
 
     # Reverse anchors.
-    for placeholder, original in cc.anchors:
+    for placeholder, original in reversed(cc.anchors):
         out = out.replace(placeholder, original)
 
     # Strip legend if present.

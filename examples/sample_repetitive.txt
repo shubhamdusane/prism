@@ -1,0 +1,120 @@
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.
+User is asking about the authentication middleware.
+The authentication middleware handles JWT tokens.
+JWT tokens are validated by the authentication middleware.
+The authentication middleware rejects invalid JWT tokens.
+Error logs from the authentication middleware: line 42, line 43.
+Visit https://docs.example.com/auth for more on authentication middleware.

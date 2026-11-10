@@ -16,7 +16,6 @@ import sys
 from .compressor import compress
 from .stats import estimate_savings
 
-
 MIN_CHARS = int(os.environ.get("PRISM_MIN_CHARS", "1000"))
 LEVEL = os.environ.get("PRISM_LEVEL", "balanced")
 REPORT = os.environ.get("PRISM_REPORT", "0") == "1"
@@ -55,7 +54,7 @@ def main() -> int:
         sys.stdout.write(json.dumps(response))
         return 0
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - a hook must never break the user's prompt
         # Never fail the user prompt. Log to stderr silently.
         sys.stderr.write(f"[prism-hook] error: {e}\n")
         return 0

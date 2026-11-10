@@ -22,7 +22,6 @@ from typing import Any
 
 from .compressor import compress
 
-
 _MIN_COMPRESS_CHARS = 500  # skip short prompts — compression overhead dominates
 
 
@@ -86,14 +85,14 @@ class _AnthropicMessages:
     def create(self, *args: Any, **kwargs: Any) -> Any:
         if "messages" in kwargs and isinstance(kwargs["messages"], list):
             kwargs["messages"] = _compress_messages(kwargs["messages"], self._level)
-        if "system" in kwargs and isinstance(kwargs["system"], str):
-            if len(kwargs["system"]) >= _MIN_COMPRESS_CHARS:
-                from typing import cast
+        system = kwargs.get("system")
+        if isinstance(system, str) and len(system) >= _MIN_COMPRESS_CHARS:
+            from typing import cast
 
-                from .compressor import Level
+            from .compressor import Level
 
-                cc = compress(kwargs["system"], level=cast(Level, self._level))
-                kwargs["system"] = cc.to_prompt()
+            cc = compress(system, level=cast(Level, self._level))
+            kwargs["system"] = cc.to_prompt()
         return self._inner.create(*args, **kwargs)
 
     def __getattr__(self, name: str) -> Any:
@@ -111,6 +110,7 @@ class _AnthropicWrapper:
 
 
 # ─── Public API ──────────────────────────────────────────────────────────────
+
 
 def wrap_openai(client: Any, level: str = "balanced") -> Any:
     """Wrap an OpenAI client so every .chat.completions.create call compresses messages."""

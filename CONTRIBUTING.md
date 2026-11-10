@@ -31,7 +31,7 @@ This project follows a strict Code of Conduct. By participating, you agree to up
 ```bash
 # Navigate to the Prism repository on GitHub and click "Fork"
 # Then clone your fork locally
-git clone https://github.com/<your-username>/prism.git
+git clone https://github.com/shubhamdusane/prism.git
 cd prism
 ```
 
@@ -88,7 +88,7 @@ Then open a Pull Request on the main repository against the `main` branch.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/prism.git
+git clone https://github.com/shubhamdusane/prism.git
 cd prism
 
 # Create a virtual environment
@@ -296,7 +296,7 @@ You retain copyright ownership of your contributions. By submitting a Pull Reque
 
 If you have questions about contributing, feel free to:
 
-1. Open a [Discussion](https://github.com/your-org/prism/discussions) on GitHub.
+1. Open a [Discussion](https://github.com/shubhamdusane/prism/discussions) on GitHub.
 2. Reach out to the maintainers.
 3. Review existing issues and PRs for context.
 

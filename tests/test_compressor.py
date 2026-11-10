@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+import pytest
+
 from prism.compressor import compress, expand
 
 
@@ -58,14 +62,17 @@ def test_dedup_consecutive_duplicate_lines():
 
 def test_savings_on_realistic_input():
     # Build a realistic agent context with repetition.
-    context = "\n".join([
-        "User is asking about the authentication middleware.",
-        "The authentication middleware handles JWT tokens.",
-        "JWT tokens are validated by the authentication middleware.",
-        "The authentication middleware rejects invalid JWT tokens.",
-        "Error logs from the authentication middleware: line 42, line 43.",
-        "Visit https://docs.example.com/auth for more on authentication middleware.",
-    ] * 3)
+    context = "\n".join(
+        [
+            "User is asking about the authentication middleware.",
+            "The authentication middleware handles JWT tokens.",
+            "JWT tokens are validated by the authentication middleware.",
+            "The authentication middleware rejects invalid JWT tokens.",
+            "Error logs from the authentication middleware: line 42, line 43.",
+            "Visit https://docs.example.com/auth for more on authentication middleware.",
+        ]
+        * 3
+    )
     cc = compress(context, level="balanced")
     assert cc.savings_pct > 15.0, f"expected >15% savings, got {cc.savings_pct}"
 
@@ -83,8 +90,6 @@ def test_aggressive_level_drops_low_salience():
 
 
 def test_type_error_on_non_string():
-    import pytest
-
     with pytest.raises(TypeError):
         compress(123)  # type: ignore[arg-type]
 
@@ -96,7 +101,7 @@ def test_compressed_context_ratio_and_pct():
 
 
 def test_to_prompt_includes_legend_when_refs():
-    text = ("the authentication middleware handles tokens. " * 5)
+    text = "the authentication middleware handles tokens. " * 5
     cc = compress(text, level="balanced")
     rendered = cc.to_prompt()
     if cc.refs:
@@ -109,3 +114,61 @@ def test_level_safe_no_refs():
     text = "repeat this phrase. repeat this phrase. repeat this phrase."
     cc = compress(text, level="safe")
     assert cc.refs == {}
+
+
+# ─── Regression + reversibility tests ───────────────────────────────────────
+
+_MIXED = (
+    "Deploy notes for build 20240115.\n"
+    "Run `make release` then check https://ci.example.com/builds/4821 for status.\n"
+    "```\n"
+    "curl https://api.example.com/v1/items?limit=1000 -H 'x: y'\n"
+    "```\n"
+    "Contact ops@example.com or 10.0.0.12 if the path /var/log/app/error.log grows.\n"
+)
+
+
+def test_to_prompt_keeps_anchors_verbatim():
+    # The text sent to a model must contain URLs/code/numbers exactly, not placeholders.
+    cc = compress(_MIXED, level="safe")
+    prompt = cc.to_prompt()
+    assert "◎" not in prompt
+    for needle in (
+        "https://ci.example.com/builds/4821",
+        "https://api.example.com/v1/items?limit=1000",
+        "ops@example.com",
+        "10.0.0.12",
+        "/var/log/app/error.log",
+        "`make release`",
+    ):
+        assert needle in prompt
+
+
+@pytest.mark.parametrize("level", ["safe", "balanced"])
+def test_roundtrip_exact_with_nested_anchors(level):
+    # A URL inside a code block creates nested anchors; expand() must restore both.
+    assert expand(compress(_MIXED, level=level)) == _MIXED
+
+
+@pytest.mark.parametrize("level", ["safe", "balanced"])
+def test_roundtrip_exact_on_repo_document(level):
+    text = (Path(__file__).parent.parent / "CONTRIBUTING.md").read_text(encoding="utf-8")
+    assert expand(compress(text, level=level)) == text
+
+
+def test_consecutive_duplicate_lines_are_not_restored():
+    # Documented limitation: the dedup pass drops consecutive duplicate lines for good.
+    text = "alpha\n    }\n    }\nomega\n"
+    assert expand(compress(text, level="safe")) != text
+
+
+def test_aggressive_is_lossy():
+    text = (
+        "The authentication system handles login. "
+        "It really is a very simple thing actually. "
+        "Just a basic component that does the thing. "
+        "It uses JWT tokens for session management."
+    )
+    cc = compress(text, level="aggressive")
+    assert cc.dropped_spans
+    assert expand(cc) != text
